@@ -7,22 +7,7 @@ import json
 import sys
 url = 'https://codeforces.com/api/'
 plt.style.use(['default', 'seaborn-darkgrid'])
-def printt(r, param, cond='-1', condp='-1', s='-1', returndata=0):
-    data = []
-    for _ in r.json()['result']:
-        if cond == '-1' or _[condp] == cond:
-            if s == '-1':
-                if returndata == 0:
-                    print(_[param])
-                else:
-                    data.append(_[param])
-            else:
-                if returndata == 0:
-                    print(_[s][param])
-                else:
-                    data.append(_[s][param])
-    if returndata == 1:
-        return data
+
 
 def creq(r): #check request
     if r.status_code != 200:
@@ -40,7 +25,11 @@ handle = input('Enter handle: ')
 r = rq.get(url+'user.status?handle='+handle)
 creq(r)
 
-data = printt(r, 'index', 'OK', 'verdict', 'problem', 1)
+data = []
+for _ in r.json()['result']:
+    if _['verdict'] == 'OK':
+        data.append(_['problem']['index'])
+
 labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 arr = np.zeros([8], dtype='uint64')
 data = np.array(data)
