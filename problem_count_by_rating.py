@@ -1,9 +1,7 @@
 import requests as rq
 import matplotlib.pyplot as plt
-from matplotlib import style # Sometimes normal usage didn't worked.
 import pandas as pd
 import numpy as np
-import json
 import sys
 url = 'https://codeforces.com/api/'
 plt.style.use(['default', 'seaborn-darkgrid'])
@@ -14,30 +12,26 @@ def creq(r): #check request
         print('Connection failed...')
         sys.exit()
 
-
-# for _ in r.json()['result']:
-  # print(_['id'])
-# print(r.json()['result'][0])
-
 handle = input('Enter handle: ')
 r = rq.get(url+'user.status?handle='+handle)
 creq(r)
+# print(r.json()['result'][2]['problem'])
 
 data = []
 for _ in r.json()['result']:
-    if _['verdict'] == 'OK':
-        data.append(_['problem']['index'])
+    if _['verdict'] == 'OK' and 'rating' in _['problem']:
+        data.append(_['problem']['rating'])
 
-labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
-arr = np.zeros([8], dtype='uint64')
+labels = np.arange(800, max(data)+200, 100)
+arr = np.zeros([len(labels)], dtype='uint64')
 data = np.array(data)
 data = pd.DataFrame(data)
 
-for i in range(8):
+for i in range(len(labels)):
     arr[i] = data.loc[data[0] == labels[i]].count()[0]
 
-plt.bar(labels, arr)
-plt.title('Submissions of ' + handle + ' by Indexes')
+plt.bar(labels, arr, width=100)
+plt.title('Submissions of ' + handle + ' by Ratings')
 plt.xlabel('Index')
 plt.ylabel('Count')
 

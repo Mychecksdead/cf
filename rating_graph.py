@@ -1,7 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from numpy.core.fromnumeric import amax
-import pandas as pd
 import requests as rq
 import time
 import datetime
