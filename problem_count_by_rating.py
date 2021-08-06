@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 import sys
 url = 'https://codeforces.com/api/'
-plt.style.use(['default', 'seaborn-darkgrid'])
+plt.style.use(['default', 'seaborn-whitegrid'])
 
 
 def creq(r): #check request
