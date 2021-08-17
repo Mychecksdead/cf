@@ -32,7 +32,7 @@ current_date = datetime.date.today()
 
 plt.style.use(['default', 'seaborn-darkgrid'])
 max_year = current_date.year
-
+last_cordinates = []
 
 
 def process(handle, index, min_year):
@@ -50,7 +50,9 @@ def process(handle, index, min_year):
         t.append(convert(times[rating['contestId']]))
 
     min_year = min(min_year, int(time.ctime(times[r.json()['result'][0]['contestId']]).split()[4]))
-
+    t.append(max_year+1)
+    data.append(data[-1])
+    last_cordinates.append([t[-1], data[-1]])
     data = np.array(data)
     t = np.array(t)
 
@@ -69,6 +71,8 @@ def main():
     plt.ylabel('Rating', fontsize=20)
     plt.xticks(np.arange(min_year, max_year+2, 1))
     plt.legend()
+    for i in range(len(handles)):
+        plt.text(last_cordinates[i][0]+1/7, last_cordinates[i][1], handles[i])
     plt.show()
 
 main()
